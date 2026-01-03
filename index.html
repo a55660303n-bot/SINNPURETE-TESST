@@ -23,7 +23,21 @@
         h2 { font-weight: 300; letter-spacing: 3px; margin-bottom: 40px; line-height: 1.4; }
         .btn { display: block; width: 100%; padding: 18px; margin: 12px 0; border: 1px solid #ddd; background: none; cursor: pointer; transition: 0.4s; font-size: 15px; }
         .btn:hover { border-color: #000; background: #fbfbfb; }
-        
+.hero-image-container {
+    margin: 30px auto;
+    width: 200px; /* 寬度 */
+    height: 280px; /* 高度 */
+    overflow: hidden;
+    /* 拱門形狀的核心：上方圓角 100px 讓它變圓弧 */
+    border-radius: 100px 100px 0 0; 
+    border: 1px solid #eee; /* 選配：給拱門一個淡淡的邊框感 */
+}
+
+.arch-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 確保圖片填滿拱門且不變形 */
+}
         /* 座標圖 */
         .map-wrapper { position: relative; width: 300px; height: 300px; margin: 40px auto; border: 1px solid #eee; background: #fff; }
         .axis-label { position: absolute; font-size: 11px; color: #999; }
@@ -50,7 +64,7 @@
         <p>探索專屬於您的正念香氣</p>
 
         <div class="hero-image-container">
-        <img src="封面.JPG" alt="Scent" class="arch-image">
+        <img src="cover.jpg" alt="Scent" class="arch-image">
     </div>
         
         <button class="btn" onclick="startQuiz()" style="background:#000; color:#fff;">開始分析</button>
@@ -214,6 +228,7 @@
 </body>
 
 </html>
+
 
 
 
