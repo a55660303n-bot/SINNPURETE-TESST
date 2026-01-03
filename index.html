@@ -6,7 +6,17 @@
     <title>Scent Finder | 香氛診斷</title>
     <style>
         :root { --primary-color: #333; --bg-color: #fcfaf8; }
-        body { font-family: "Optima", "serif", "Microsoft JhengHei"; background-color: var(--bg-color); margin: 0; color: var(--primary-color); scroll-behavior: smooth; }
+        body { font-family: "Optima", "serif", "Microsoft JhengHei";
+                  margin: 0;
+               color: var(--primary-color);
+               scroll-behavior: smooth;
+    
+               /* 新增背景圖設定 */
+               background:linear-gradient(135deg,#F1F4F2 0%, #EBEEE9 100%);
+               background-size: cover;
+               background-position: center;
+               background-attachment: fixed; /* 讓背景固定，內容捲動 */
+               min-height: 100vh; }
         .container { max-width: 600px; margin: 0 auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
         .hidden { display: none !important; }
         .card { background: white; padding: 50px 30px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; }
@@ -199,6 +209,7 @@
 </body>
 
 </html>
+
 
 
 
