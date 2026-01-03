@@ -129,43 +129,70 @@
         });
     }
 
-    function showResult() {
-        document.getElementById('quiz-page').classList.add('hidden');
-        document.getElementById('result-page').classList.remove('hidden');
+   function showResult() {
+    // 隱藏測驗頁，顯示結果頁
+    document.getElementById('quiz-page').classList.add('hidden');
+    document.getElementById('result-page').classList.remove('hidden');
 
-        // 1. 計算最近產品 (歐幾里得距離)
-        const userX = scoreX / 2; // 將總分 -2~2 轉為 -1~1 比對座標
-        const userY = scoreY / 2;
-        let closest = null, minD = Infinity;
-
-        productData[selectedType].forEach(p => {
-            const d = Math.sqrt(Math.pow(userX - p.x, 2) + Math.pow(userY - p.y, 2));
-            if (d < minD) { minD = d; closest = p; }
-        });
-
-        // 2. 圓點移動動畫 (百分比映射)
-        setTimeout(() => {
-            const dot = document.getElementById('target-dot');
-            const leftPerc = ((scoreX + 2) / 4) * 80 + 10;
-            const topPerc = 100 - (((scoreY + 2) / 4) * 80 + 10);
-            dot.style.left = `${leftPerc}%`;
-            dot.style.top = `${topPerc}%`;
-        }, 300);
-
-        // 3. 2.5秒後顯示詳細資訊並自動滑動
-        setTimeout(() => {
-            const detail = document.getElementById('product-detail');
-            detail.classList.remove('hidden');
-            document.getElementById('p-name').innerText = closest.name;
-            document.getElementById('p-img').src = closest.img;
-            document.getElementById('p-link').href = closest.link;
-            document.getElementById('status-text').innerText = "找到最適合您的香氣了！";
-            
-            // 自動滑動到產品區
-            detail.scrollIntoView({ behavior: 'smooth' });
-        }, 2500);
+    // --- 【核心功能：自動切換地圖背景】 ---
+    const mapElement = document.querySelector('.map-wrapper');
+    
+    // 根據第一題選擇的分類 (selectedType) 匹配圖片檔名
+    // 請確保你上傳到 GitHub 的檔名與下面引號內的文字完全一致（包含中英文與大小寫）
+    let bgImage = "";
+    if (selectedType === 'oil') {
+        bgImage = "香氛多用油香氛圖譜.jpg";
+    } else if (selectedType === 'room') {
+        bgImage = "MAP.jpg"; // 正念香氛圖譜
+    } else if (selectedType === 'perfume') {
+        bgImage = "淡香精圖譜.jpg";
     }
+
+    if (bgImage !== "") {
+        mapElement.style.backgroundImage = `url('${bgImage}')`;
+        mapElement.style.backgroundSize = "cover";
+        mapElement.style.backgroundPosition = "center";
+        mapElement.style.border = "none"; // 移除邊框讓地圖更美觀
+    }
+    // ------------------------------------
+
+    // 計算最近產品 (歐幾里得距離)
+    const userX = scoreX / 2; 
+    const userY = scoreY / 2;
+    let closest = null;
+    let minD = Infinity;
+
+    productData[selectedType].forEach(p => {
+        const d = Math.sqrt(Math.pow(userX - p.x, 2) + Math.pow(userY - p.y, 2));
+        if (d < minD) {
+            minD = d;
+            closest = p;
+        }
+    });
+
+    // 圓點移動動畫
+    setTimeout(() => {
+        const dot = document.getElementById('target-dot');
+        const leftPerc = ((scoreX + 2) / 4) * 80 + 10;
+        const topPerc = 100 - (((scoreY + 2) / 4) * 80 + 10);
+        dot.style.left = `${leftPerc}%`;
+        dot.style.top = `${topPerc}%`;
+    }, 300);
+
+    // 延遲顯示詳細資訊並自動滑動
+    setTimeout(() => {
+        const detail = document.getElementById('product-detail');
+        detail.classList.remove('hidden');
+        document.getElementById('p-name').innerText = closest.name;
+        document.getElementById('p-img').src = closest.img;
+        document.getElementById('p-link').href = closest.link;
+        document.getElementById('status-text').innerText = "為您尋得的專屬氣息：";
+        
+        detail.scrollIntoView({ behavior: 'smooth' });
+    }, 2500);
+}
 </script>
 
 </body>
+
 </html>
