@@ -21,14 +21,24 @@
 
         .container { max-width: 600px; margin: 0 auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
         .hidden { display: none !important; }
-        .card { background: white; padding: 50px 30px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; position: relative; }
+
+        /* 調整測驗框框更圓角 */
+        .card { 
+            background: white; 
+            padding: 50px 30px; 
+            border-radius: 20px; /* 改為 20px 更有高級感 */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05); 
+            text-align: center; 
+            position: relative; 
+        }
         
         h2 { font-weight: 300; letter-spacing: 3px; margin-bottom: 20px; line-height: 1.4; }
-        .btn { display: block; width: 100%; padding: 18px; margin: 12px 0; border: 1px solid #ddd; background: none; cursor: pointer; transition: 0.4s; font-size: 15px; }
+        .btn { display: block; width: 100%; padding: 18px; margin: 12px 0; border: 1px solid #ddd; background: none; cursor: pointer; transition: 0.4s; font-size: 15px; border-radius: 10px; }
         .btn:hover { border-color: #000; background: #fbfbfb; }
 
-        /* LOGO 樣式 */
-        .header-logo { position: absolute; top: 30px; left: 30px; z-index: 100; }
+        /* LOGO 樣式 (含連結) */
+        .header-logo { position: absolute; top: 30px; left: 30px; z-index: 100; transition: opacity 0.3s; }
+        .header-logo:hover { opacity: 0.7; }
         .header-logo img { height: 50px; width: auto; }
 
         @media (max-width: 600px) {
@@ -43,7 +53,7 @@
         }
         .arch-image { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 座標圖與文字放大 */
+        /* 座標圖與文字 */
         .map-wrapper { position: relative; width: 300px; height: 300px; margin: 40px auto; border: 1px solid #eee; background: #fff; background-size: cover; background-position: center; }
         .axis-label { position: absolute; font-size: 18px; font-weight: bold; color: #216250; white-space: nowrap; }
 
@@ -54,22 +64,42 @@
         }
 
         /* 產品詳情 */
-        .product-img { width: 100%; max-width: 300px; border-radius: 4px; margin: 20px 0; }
-        .buy-link { display: inline-block; background: #000; color: #fff; padding: 15px 40px; text-decoration: none; margin: 20px 0; }
+        .product-img { width: 100%; max-width: 300px; border-radius: 10px; margin: 20px 0; }
+
+        /* 立即購買按鈕 + 跳動動畫 */
+        .buy-link { 
+            display: inline-block; 
+            background: #000; 
+            color: #fff; 
+            padding: 15px 40px; 
+            text-decoration: none; 
+            margin: 20px 0; 
+            border-radius: 5px;
+            font-weight: bold;
+            animation: pulse-animation 2s infinite; /* 啟動動畫 */
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+        }
 
         /* 折扣碼樣式 */
         .coupon-section {
             margin: 30px auto; padding: 20px; border: 2px dashed #8c7851;
-            background: #fffaf5; border-radius: 8px; width: 90%;
+            background: #fffaf5; border-radius: 15px; width: 90%;
         }
-        .coupon-code { font-size: 24px; font-weight: bold; color: #333; display: block; margin-bottom: 10px; }
+        .coupon-code { font-size: 24px; font-weight: bold; color: #333; display: block; margin-bottom: 10px; letter-spacing: 2px; }
         .copy-btn { background: #8c7851; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; }
         .expiry-text { font-size: 12px; color: #999; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="header-logo"><img src="logo1.png" alt="Logo"></div>
+<a href="https://www.sinnpurete.com.tw/" target="_blank" class="header-logo">
+    <img src="logo1.png" alt="Sinn Pureté Logo">
+</a>
 
 <div class="container">
     <div id="start-page" class="card">
@@ -96,21 +126,21 @@
         </div>
         <p id="status-text">正在計算您的專屬香氣...</p>
 
-      <div id="product-detail" class="hidden">
-    <img id="p-img" src="" class="product-img">
-    <h3 id="p-name"></h3>
-    
-    <div id="coupon-container" class="coupon-section">
-        <p style="margin:0 0 10px 0; font-size:14px; color:#8c7851;">專屬結帳優惠碼</p>
-        <span class="coupon-code" id="code-text">OFF10</span>
-        <button class="copy-btn" onclick="copyCoupon()">點擊複製折扣碼</button>
-        <p class="expiry-text">※ 2026/01/30 前有效，官網購買即享 10% OFF</p>
-    </div>
+        <div id="product-detail" class="hidden" style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 30px;">
+            <img id="p-img" src="" class="product-img">
+            <h3 id="p-name"></h3>
 
-    <a id="p-link" href="#" target="_blank" class="buy-link">使用折扣碼，立即購買</a>
+            <div id="coupon-container" class="coupon-section">
+                <p style="margin:0 0 10px 0; font-size:14px; color:#8c7851;">專屬結帳優惠碼</p>
+                <span class="coupon-code" id="code-text">OFF10</span>
+                <button class="copy-btn" onclick="copyCoupon()">點擊複製折扣碼</button>
+                <p class="expiry-text">※ 2026/01/30 前有效，官網購買即享 10% OFF</p>
+            </div>
 
-    <button class="btn" onclick="location.reload()" style="border:none; text-decoration:underline; margin-top:20px;">重新測驗</button>
-</div>
+            <a id="p-link" href="#" target="_blank" class="buy-link">使用折扣碼，立即購買</a>
+
+            <button class="btn" onclick="location.reload()" style="border:none; text-decoration:underline; margin-top:20px;">重新測驗</button>
+        </div>
     </div>
 </div>
 
@@ -169,13 +199,17 @@
         document.getElementById('quiz-page').classList.add('hidden');
         document.getElementById('result-page').classList.remove('hidden');
 
-        // 背景切換邏輯
+        // 背景切換邏輯 (請確保 GitHub 上的檔名完全一致)
         const mapElement = document.getElementById('map-bg');
-        let bgImage = selectedType === 'oil' ? "香氛多用油香氛圖譜.jpg" : (selectedType === 'room' ? "MAP.jpg" : "淡香精圖譜.jpg");
-        mapElement.style.backgroundImage = `url('${bgImage}')`;
-        mapElement.style.border = "none";
+        let bgImage = "";
+        if (selectedType === 'oil') bgImage = "香氛多用油香氛圖譜.jpg";
+        else if (selectedType === 'room') bgImage = "MAP.jpg";
+        else if (selectedType === 'perfume') bgImage = "淡香精圖譜.jpg";
 
-        // 計算最近產品
+        if (bgImage) {
+            mapElement.style.backgroundImage = "url('" + bgImage + "')";
+        }
+
         const userX = scoreX / 2; const userY = scoreY / 2;
         let closest = productData[selectedType][0];
         let minD = Infinity;
@@ -184,14 +218,12 @@
             if (d < minD) { minD = d; closest = p; }
         });
 
-        // 點移動
         setTimeout(() => {
             const dot = document.getElementById('target-dot');
             dot.style.left = `${((scoreX + 2) / 4) * 80 + 10}%`;
             dot.style.top = `${100 - (((scoreY + 2) / 4) * 80 + 10)}%`;
         }, 300);
 
-        // 顯示結果與折扣碼
         setTimeout(() => {
             const detail = document.getElementById('product-detail');
             detail.classList.remove('hidden');
@@ -220,4 +252,3 @@
 </script>
 </body>
 </html>
-
