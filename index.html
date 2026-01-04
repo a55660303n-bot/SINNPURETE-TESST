@@ -107,7 +107,10 @@
         
         /* 座標圖 */
         .map-wrapper { position: relative; width: 300px; height: 300px; margin: 40px auto; border: 1px solid #eee; background: #fff; }
-        .axis-label { position: absolute; font-size: 11px; color: #999; }
+        .axis-label { position: absolute; font-size: 14px; 
+                     font-weight: bold;    /* 如果想讓字變粗可以加這行 */
+                    color: #216250;          /* 也可以順便調整顏色 */
+                    white-space: nowrap;  /* 確保字不會自動換行 */ }
         .dot { 
             position: absolute; width: 14px; height: 14px; background: white; 
             border: 2px solid black; border-radius: 50%; transform: translate(-50%, -50%);
@@ -335,6 +338,7 @@ function checkCouponExpiry() {
 </body>
 
 </html>
+
 
 
 
