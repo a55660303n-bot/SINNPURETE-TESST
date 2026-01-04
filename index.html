@@ -5,138 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scent Finder | 香氛診斷</title>
     <style>
-        :root { --primary-color: #333; --bg-color: #fcfaf8; }
-        body { font-family: "Optima", "serif", "Microsoft JhengHei";
-                  margin: 0;
-               color: var(--primary-color);
-               scroll-behavior: smooth;
-    
-               /* 新增背景圖設定 */
-               background:linear-gradient(135deg,#bcd3c4 0%, #EBEEE9 100%);
-               background-size: cover;
-               background-position: center;
-               background-attachment: fixed; /* 讓背景固定，內容捲動 */
-               min-height: 100vh; }
+        :root { --primary-color: #333; }
+        
+        body { 
+            font-family: "Optima", "serif", "Microsoft JhengHei";
+            margin: 0;
+            color: var(--primary-color);
+            scroll-behavior: smooth;
+            background: linear-gradient(135deg, #bcd3c4 0%, #EBEEE9 100%);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh; 
+        }
+
         .container { max-width: 600px; margin: 0 auto; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; }
         .hidden { display: none !important; }
-        .card { background: white; padding: 50px 30px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; }
-        h2 { font-weight: 300; letter-spacing: 3px; margin-bottom: 40px; line-height: 1.4; }
+        .card { background: white; padding: 50px 30px; border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); text-align: center; position: relative; }
+        
+        h2 { font-weight: 300; letter-spacing: 3px; margin-bottom: 20px; line-height: 1.4; }
         .btn { display: block; width: 100%; padding: 18px; margin: 12px 0; border: 1px solid #ddd; background: none; cursor: pointer; transition: 0.4s; font-size: 15px; }
         .btn:hover { border-color: #000; background: #fbfbfb; }
-.hero-image-container {
-    margin: 30px auto;
-    width: 200px; /* 寬度 */
-    height: 280px; /* 高度 */
-    overflow: hidden;
-    /* 拱門形狀的核心：上方圓角 100px 讓它變圓弧 */
-    border-radius: 100px 100px 0 0; 
-    border: 1px solid #eee; /* 選配：給拱門一個淡淡的邊框感 */
-}
 
-.arch-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 確保圖片填滿拱門且不變形 */
-}
+        /* LOGO 樣式 */
+        .header-logo { position: absolute; top: 30px; left: 30px; z-index: 100; }
+        .header-logo img { height: 50px; width: auto; }
 
-/* 電腦版 LOGO 樣式 */
-.header-logo {
-    position: absolute;
-    top: 30px;    /* 距離上方距離 */
-    left: 30px;   /* 距離左邊距離 */
-    z-index: 100; /* 確保它在最前面 */
-}
+        @media (max-width: 600px) {
+            .header-logo { top: 20px; left: 20px; }
+            .header-logo img { height: 25px; }
+        }
 
-.header-logo img {
-    height: 50px; /* 這裡調整電腦看的大小 */
-    width: auto;
-}
+        /* 拱門封面 */
+        .hero-image-container {
+            margin: 30px auto; width: 200px; height: 280px;
+            overflow: hidden; border-radius: 100px 100px 0 0; border: 1px solid #eee;
+        }
+        .arch-image { width: 100%; height: 100%; object-fit: cover; }
 
-/* 關鍵：手機版修正 (當螢幕寬度小於 600px) */
-@media (max-width: 600px) {
-    .header-logo {
-        top: 20px;  /* 手機版稍微往下移一點點 */
-        left: 20px; /* 手機版靠邊一點 */
-    }
-    .header-logo img {
-        height: 25px; /* 手機版 LOGO 縮小，才不會佔滿螢幕 */
-    }
-}
+        /* 座標圖與文字放大 */
+        .map-wrapper { position: relative; width: 300px; height: 300px; margin: 40px auto; border: 1px solid #eee; background: #fff; background-size: cover; background-position: center; }
+        .axis-label { position: absolute; font-size: 18px; font-weight: bold; color: #216250; white-space: nowrap; }
 
-        /* 折扣碼區塊樣式 */
-.coupon-section {
-    margin-top: 30px;
-    padding: 20px;
-    border: 2px dashed #8c7851;
-    background: #fffaf5;
-    border-radius: 8px;
-    display: inline-block;
-    width: 90%;
-    max-width: 350px;
-}
-
-.coupon-code {
-    font-size: 24px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    color: #333;
-    display: block;
-    margin-bottom: 10px;
-}
-
-.copy-btn {
-    background: #8c7851;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.3s;
-}
-
-.copy-btn:hover {
-    background: #6d5d3e;
-}
-
-.expiry-text {
-    font-size: 12px;
-    color: #999;
-    margin-top: 10px;
-}
-        
-        /* 座標圖 */
-        .map-wrapper { position: relative; width: 300px; height: 300px; margin: 40px auto; border: 1px solid #eee; background: #fff; }
-        .axis-label { position: absolute; font-size: 14px; 
-                     font-weight: bold;    /* 如果想讓字變粗可以加這行 */
-                    color: #216250;          /* 也可以順便調整顏色 */
-                    white-space: nowrap;  /* 確保字不會自動換行 */ }
         .dot { 
             position: absolute; width: 14px; height: 14px; background: white; 
             border: 2px solid black; border-radius: 50%; transform: translate(-50%, -50%);
             transition: all 2s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 10;
         }
 
-        /* 產品詳情區 */
-        #product-detail { margin-top: 50px; padding: 60px 20px; text-align: center; border-top: 1px solid #eee; }
-        .product-img { width: 100%; max-width: 300px; border-radius: 4px; margin-bottom: 20px; background: #eee; }
-        .buy-link { display: inline-block; background: #000; color: #fff; padding: 15px 40px; text-decoration: none; margin-top: 20px; }
+        /* 產品詳情 */
+        .product-img { width: 100%; max-width: 300px; border-radius: 4px; margin: 20px 0; }
+        .buy-link { display: inline-block; background: #000; color: #fff; padding: 15px 40px; text-decoration: none; margin: 20px 0; }
+
+        /* 折扣碼樣式 */
+        .coupon-section {
+            margin: 30px auto; padding: 20px; border: 2px dashed #8c7851;
+            background: #fffaf5; border-radius: 8px; width: 90%;
+        }
+        .coupon-code { font-size: 24px; font-weight: bold; color: #333; display: block; margin-bottom: 10px; }
+        .copy-btn { background: #8c7851; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; }
+        .expiry-text { font-size: 12px; color: #999; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="header-logo">
-    <img src="logo1.png" alt="Logo">
-</div>
+<div class="header-logo"><img src="logo1.png" alt="Logo"></div>
+
 <div class="container">
     <div id="start-page" class="card">
         <h2>FIND YOUR SCENT</h2>
         <p>探索專屬於您的正念香氣</p>
-
-        <div class="hero-image-container">
-        <img src="cover.jpg" alt="Scent" class="arch-image">
-    </div>
-        
+        <div class="hero-image-container"><img src="cover.jpg" class="arch-image"></div>
         <button class="btn" onclick="startQuiz()" style="background:#000; color:#fff;">開始分析</button>
     </div>
 
@@ -148,60 +87,42 @@
 
     <div id="result-page" class="card hidden">
         <h2>FRAGRANCE MAP</h2>
-        <div class="map-wrapper">
+        <div class="map-wrapper" id="map-bg">
             <div id="target-dot" class="dot" style="left: 50%; top: 50%;"></div>
-            <div class="axis-label" style="top: -25px; left: 50%; transform: translateX(-50%);">木質調</div>
-            <div class="axis-label" style="bottom: -25px; left: 50%; transform: translateX(-50%);">花香調</div>
-            <div class="axis-label" style="left: -45px; top: 50%; transform: translateY(-50%);">甜美</div>
-            <div class="axis-label" style="right: -45px; top: 50%; transform: translateY(-50%);">清爽</div>
+            <div class="axis-label" style="top: -35px; left: 50%; transform: translateX(-50%);">木質調</div>
+            <div class="axis-label" style="bottom: -35px; left: 50%; transform: translateX(-50%);">花香調</div>
+            <div class="axis-label" style="left: -55px; top: 50%; transform: translateY(-50%);">甜美</div>
+            <div class="axis-label" style="right: -55px; top: 50%; transform: translateY(-50%);">清爽</div>
         </div>
         <p id="status-text">正在計算您的專屬香氣...</p>
-    </div>
 
-    <div id="product-detail" class="card hidden">
-        <img id="p-img" src="" alt="產品圖片" class="product-img">
-        <h3 id="p-name"></h3>
-        <p id="p-desc" style="color:#666; font-size:14px;"></p>
-        <a id="p-link" href="#" target="_blank" class="buy-link">立即購買</a>
-        <button class="btn" onclick="location.reload()" style="margin-top:30px; border:none; text-decoration:underline;">重新測驗</button>
-    <div id="product-detail" class="card hidden">
-    <a id="p-link" href="#" target="_blank" class="buy-link">立即購買</a>
+        <div id="product-detail" class="hidden">
+            <img id="p-img" src="" class="product-img">
+            <h3 id="p-name"></h3>
+            <a id="p-link" href="#" target="_blank" class="buy-link">立即購買</a>
 
-    <div id="coupon-container" class="coupon-section">
-        <p style="margin: 0 0 10px 0; font-size: 14px; color: #8c7851;">專屬結帳優惠碼</p>
-        <span class="coupon-code" id="code-text">OFF10</span>
-        <button class="copy-btn" onclick="copyCoupon()">點擊複製折扣碼</button>
-        <p class="expiry-text">※ 2026/01/30 前有效，官網購買即享 10% OFF</p>
-    </div>
-
-    <button class="btn" onclick="location.reload()" style="margin-top:30px; border:none; text-decoration:underline;">重新測驗</button>
-</div>
+            <div id="coupon-container" class="coupon-section">
+                <p style="margin:0 0 10px 0; font-size:14px; color:#8c7851;">專屬結帳優惠碼</p>
+                <span class="coupon-code" id="code-text">OFF10</span>
+                <button class="copy-btn" onclick="copyCoupon()">點擊複製折扣碼</button>
+                <p class="expiry-text">※ 2026/01/30 前有效，官網購買即享 10% OFF</p>
+            </div>
+            <button class="btn" onclick="location.reload()" style="border:none; text-decoration:underline;">重新測驗</button>
+        </div>
     </div>
 </div>
 
 <script>
-    // 1. 產品座標與資料 
     const productData = {
         oil: [
-            { name: "香氛多用油/心靈淨化 (Purification of Mind)", x: 0.7, y: 0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b940383a3a536e3e145ef/720x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96" },
-            { name: "香氛多用油/黑石 (BLACK STONE)", x: -0.6, y: 0.6, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b984396908c00103bf900/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1" },
-            { name: "香氛多用油/激情喚醒 (Passionate Awakening)", x: 0, y: 0.1, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9658d7d596001420bed3/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1" },
-            { name: "香氛多用油/靜與能量 (Stillness and Energy)", x: -1, y: 0, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b97894c96220018871496/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1" },
-            { name: "香氛多用油/內田理央聯名款 (Velvet Touch)", x: -0.7, y: -0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/690c1a6332300b0012686f16/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-2" }
+            { name: "香氛多用油/心靈淨化 (Purification of Mind)", x: 0.7, y: 0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b940383a3a536e3e145ef/720x.webp", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96" },
+            { name: "香氛多用油/黑石 (BLACK STONE)", x: -0.6, y: 0.6, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b984396908c00103bf900/800x.webp", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1" }
         ],
         room: [
-            { name: "無酒精正念香氛/心靈淨化 (Purification of Mind)", x: 0.7, y: 0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688d8f8077978800121021b6/800x.webp?source_format=png", link: "https://www.sinnpurete.com.tw/products/%E7%84%A1%E9%85%92%E7%B2%BE%E6%AD%A3%E5%BF%B5%E9%A6%99%E6%B0%9Bpassionate-awakening%E6%BF%80%E6%83%85%E5%96%9A%E9%86%92-1" },
-            { name: "無酒精正念香氛/激情喚醒 (Passionate Awakening)", x: 0, y: 0.2, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b900053d0780014574b1f/800x.webp?source_format=png", link: "https://www.sinnpurete.com.tw/products/%E7%84%A1%E9%85%92%E7%B2%BE%E6%AD%A3%E5%BF%B5%E9%A6%99%E6%B0%9Bpassionate-awakening%E6%BF%80%E6%83%85%E5%96%9A%E9%86%92" },
-            { name: "無酒精正念香氛/悟空好眠 (Dream Catcher)", x: -0.7, y: -0.2, img: "https://shoplineimg.com/68527c28c56c870042c966e9/690c135c13d259000cbb2168/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E7%84%A1%E9%85%92%E7%B2%BE%E6%AD%A3%E5%BF%B5-dream-catcher%E9%A6%99%E6%B0%9B%E6%82%9F%E7%A9%BA%E5%A5%BD%E7%9C%A0" }
+            { name: "無酒精正念香氛/心靈淨化 (Purification of Mind)", x: 0.7, y: 0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688d8f8077978800121021b6/800x.webp", link: "https://www.sinnpurete.com.tw/products/%E7%84%A1%E9%85%92%E7%B2%BE%E6%AD%A3%E5%BF%B5%E9%A6%99%E6%B0%9Bpassionate-awakening%E6%BF%80%E6%83%85%E5%96%9A%E9%86%92-1" }
         ],
         perfume: [
-            { name: "淡香精EDP/追求幸福 (Pursuit of Happiness)", x: -0.4, y: 0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9dd9524dd30018b1aaf4/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1-1-1-2-1" },
-            { name: "淡香精EDP/黑石 (BLACK STONE)", x: -0.6, y: 0.6, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9e5274bec500105ca1e1/540x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1-1-1-2-1-1" },
-            { name: "淡香精EDP/感官與魅力 (Sense & Sensuality)", x: 0.6, y: 0.4, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9d3bf86d64001467bc1a/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1-1-1-2" },
-            { name: "淡香精EDP/苦橙與歐白芷 (Bitter Orange & Angelica)", x: 0.55, y: 0, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b99ccfcf7b70016615110/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1" },
-            { name: "淡香精EDP/無花果與無花果葉 (Fig & Fig Leaf)", x: -0.5, y: 0, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9bbd544e9700111d2dfa/720x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1-1-1/" },
-            { name: "淡香精EDP/黑莓與茉莉 (Blackberry & Jasmine)", x: -0.5, y: -0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9aecd7d596001820c1b9/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1-1" },
-            { name: "淡香精EDP/內田理央聯名款 (Mandarin & Orange)", x: 0.7, y: -0.8, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9c3e358dd60010d4d3b5/800x.webp?source_format=jpg", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1-1-1-1" }
+            { name: "淡香精EDP/黑石 (BLACK STONE)", x: -0.6, y: 0.6, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b9e5274bec500105ca1e1/540x.webp", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96-1-1-1-1-1-1-2-1-1" }
         ]
     };
 
@@ -227,7 +148,6 @@
         document.getElementById('question-text').innerText = q.text;
         const container = document.getElementById('options-container');
         container.innerHTML = "";
-        
         q.options.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = "btn";
@@ -243,110 +163,58 @@
         });
     }
 
-   function showResult() {
-    // 隱藏測驗頁，顯示結果頁
-    document.getElementById('quiz-page').classList.add('hidden');
-    document.getElementById('result-page').classList.remove('hidden');
+    function showResult() {
+        document.getElementById('quiz-page').classList.add('hidden');
+        document.getElementById('result-page').classList.remove('hidden');
 
-    // --- 【核心功能：自動切換地圖背景】 ---
-    const mapElement = document.querySelector('.map-wrapper');
-    
-    // 根據第一題選擇的分類 (selectedType) 匹配圖片檔名
-    // 請確保你上傳到 GitHub 的檔名與下面引號內的文字完全一致（包含中英文與大小寫）
-    let bgImage = "";
-    if (selectedType === 'oil') {
-        bgImage = "香氛多用油香氛圖譜.jpg.jpg";
-    } else if (selectedType === 'room') {
-        bgImage = "MAP.jpg"; // 正念香氛圖譜
-    } else if (selectedType === 'perfume') {
-        bgImage = "淡香精圖譜.jpg";
-    }
-
-    if (bgImage !== "") {
+        // 背景切換邏輯
+        const mapElement = document.getElementById('map-bg');
+        let bgImage = selectedType === 'oil' ? "香氛多用油香氛圖譜.jpg" : (selectedType === 'room' ? "MAP.jpg" : "淡香精圖譜.jpg");
         mapElement.style.backgroundImage = `url('${bgImage}')`;
-        mapElement.style.backgroundSize = "cover";
-        mapElement.style.backgroundPosition = "center";
-        mapElement.style.border = "none"; // 移除邊框讓地圖更美觀
-    }
-    // ------------------------------------
+        mapElement.style.border = "none";
 
-    // 計算最近產品 (歐幾里得距離)
-    const userX = scoreX / 2; 
-    const userY = scoreY / 2;
-    let closest = null;
-    let minD = Infinity;
+        // 計算最近產品
+        const userX = scoreX / 2; const userY = scoreY / 2;
+        let closest = productData[selectedType][0];
+        let minD = Infinity;
+        productData[selectedType].forEach(p => {
+            const d = Math.sqrt(Math.pow(userX - p.x, 2) + Math.pow(userY - p.y, 2));
+            if (d < minD) { minD = d; closest = p; }
+        });
 
-    productData[selectedType].forEach(p => {
-        const d = Math.sqrt(Math.pow(userX - p.x, 2) + Math.pow(userY - p.y, 2));
-        if (d < minD) {
-            minD = d;
-            closest = p;
-        }
-    });
-
-    // 圓點移動動畫
-    setTimeout(() => {
-        const dot = document.getElementById('target-dot');
-        const leftPerc = ((scoreX + 2) / 4) * 80 + 10;
-        const topPerc = 100 - (((scoreY + 2) / 4) * 80 + 10);
-        dot.style.left = `${leftPerc}%`;
-        dot.style.top = `${topPerc}%`;
-    }, 300);
-
-    // 延遲顯示詳細資訊並自動滑動
-    setTimeout(() => {
-        const detail = document.getElementById('product-detail');
-        detail.classList.remove('hidden');
-        document.getElementById('p-name').innerText = closest.name;
-        document.getElementById('p-img').src = closest.img;
-        document.getElementById('p-link').href = closest.link;
-        document.getElementById('status-text').innerText = "為您尋得的專屬氣息：";
-        
-        detail.scrollIntoView({ behavior: 'smooth' });
-    }, 2500);
-}
-// 複製折扣碼功能
-function copyCoupon() {
-    const code = document.getElementById('code-text').innerText;
-    navigator.clipboard.writeText(code).then(() => {
-        const btn = document.querySelector('.copy-btn');
-        const originalText = btn.innerText;
-        btn.innerText = "已複製！";
-        btn.style.background = "#28a745"; // 變綠色提示成功
-        
+        // 點移動
         setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.background = "#8c7851";
-        }, 2000);
-    });
-}
+            const dot = document.getElementById('target-dot');
+            dot.style.left = `${((scoreX + 2) / 4) * 80 + 10}%`;
+            dot.style.top = `${100 - (((scoreY + 2) / 4) * 80 + 10)}%`;
+        }, 300);
 
-// 檢查折扣碼是否過期 (在 showResult 時執行)
-function checkCouponExpiry() {
-    const expiryDate = new Date('2026-01-31'); // 設定為 1/30 的隔天凌晨
-    const today = new Date();
-    
-    if (today >= expiryDate) {
-        const container = document.getElementById('coupon-container');
-        if (container) container.style.display = 'none'; // 過期則隱藏
+        // 顯示結果與折扣碼
+        setTimeout(() => {
+            const detail = document.getElementById('product-detail');
+            detail.classList.remove('hidden');
+            document.getElementById('p-name').innerText = closest.name;
+            document.getElementById('p-img').src = closest.img;
+            document.getElementById('p-link').href = closest.link;
+            document.getElementById('status-text').innerText = "為您尋得的專屬氣息：";
+            checkCouponExpiry();
+            detail.scrollIntoView({ behavior: 'smooth' });
+        }, 2500);
     }
-}
 
-    
+    function copyCoupon() {
+        const code = document.getElementById('code-text').innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            btn.innerText = "已複製！"; btn.style.background = "#28a745";
+            setTimeout(() => { btn.innerText = "點擊複製折扣碼"; btn.style.background = "#8c7851"; }, 2000);
+        });
+    }
+
+    function checkCouponExpiry() {
+        const expiryDate = new Date('2026-01-31');
+        if (new Date() >= expiryDate) document.getElementById('coupon-container').style.display = 'none';
+    }
 </script>
-
 </body>
-
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
