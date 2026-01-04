@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scent Finder | 香氛診斷</title>
     <style>
-        :root { --primary-color: #333; }
+        :root { 
+            --primary-color: #333; 
+            --sinn-green: #45554f; /* 定義品牌深綠色 */
+        }
         
         body { 
             font-family: "Optima", "serif", "Microsoft JhengHei";
@@ -21,85 +24,124 @@
             flex-direction: column;
         }
 
-        .container { max-width: 600px; margin: 0 auto; padding: 20px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        /* 調整容器寬度，讓電腦版看起來更大器 */
+        .container { 
+            max-width: 800px; /* 從 600px 調回 800px */
+            margin: 0 auto; 
+            padding: 40px 20px; 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+        }
+
         .hidden { display: none !important; }
 
         .card { 
             background: white; 
-            padding: 50px 30px; 
+            padding: 60px 40px; /* 增加內距讓空間感更好 */
             border-radius: 20px; 
             box-shadow: 0 10px 40px rgba(0,0,0,0.05); 
             text-align: center; 
             position: relative; 
         }
         
-        h2 { font-weight: 300; letter-spacing: 3px; margin-bottom: 20px; line-height: 1.4; }
-        .btn { display: block; width: 100%; padding: 18px; margin: 12px 0; border: 1px solid #ddd; background: none; cursor: pointer; transition: 0.4s; font-size: 15px; border-radius: 10px; }
-        .btn:hover { border-color: #000; background: #fbfbfb; }
+        h2 { font-weight: 300; letter-spacing: 3px; margin-bottom: 30px; line-height: 1.4; }
+        
+        /* 選項按鈕樣式 */
+        .btn { 
+            display: block; 
+            width: 100%; 
+            padding: 18px; 
+            margin: 12px 0; 
+            border: 1px solid #ddd; 
+            background: none; 
+            cursor: pointer; 
+            transition: 0.4s; 
+            font-size: 16px; 
+            border-radius: 10px; 
+        }
+        .btn:hover { border-color: var(--sinn-green); background: #fbfbfb; }
 
-        /* 回上一題按鈕樣式 */
+        /* 開始測驗按鈕 - 改為深綠色 */
+        .btn-primary {
+            background: var(--sinn-green) !important;
+            color: #fff !important;
+            border: none !important;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(69, 85, 79, 0.3);
+        }
+
+        /* 回上一題 */
         .back-link { 
             display: inline-block; 
-            margin-top: 20px; 
-            font-size: 13px; 
+            margin-top: 25px; 
+            font-size: 14px; 
             color: #999; 
             text-decoration: underline; 
             cursor: pointer; 
             transition: 0.3s;
         }
-        .back-link:hover { color: #333; }
+        .back-link:hover { color: var(--sinn-green); }
 
         /* LOGO 樣式 */
         .header-logo { position: absolute; top: 30px; left: 30px; z-index: 100; transition: opacity 0.3s; }
         .header-logo img { height: 50px; width: auto; }
 
         @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .card { padding: 40px 20px; }
             .header-logo { top: 20px; left: 20px; }
             .header-logo img { height: 25px; }
         }
 
         /* 拱門封面 */
         .hero-image-container {
-            margin: 30px auto; width: 200px; height: 280px;
-            overflow: hidden; border-radius: 100px 100px 0 0;
+            margin: 40px auto; width: 220px; height: 300px;
+            overflow: hidden; border-radius: 110px 110px 0 0;
         }
         .arch-image { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 座標圖 (已移除邊框) */
-        .map-wrapper { position: relative; width: 300px; height: 300px; margin: 40px auto; background: #fff; background-size: cover; background-position: center; }
+        /* 座標圖 */
+        .map-wrapper { position: relative; width: 320px; height: 320px; margin: 40px auto; background: #fff; background-size: cover; background-position: center; }
         .axis-label { position: absolute; font-size: 18px; font-weight: bold; color: #216250; white-space: nowrap; }
 
         .dot { 
-            position: absolute; width: 14px; height: 14px; background: white; 
-            border: 2px solid black; border-radius: 50%; transform: translate(-50%, -50%);
+            position: absolute; width: 16px; height: 16px; background: white; 
+            border: 2px solid var(--sinn-green); border-radius: 50%; transform: translate(-50%, -50%);
             transition: all 2s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 10;
         }
 
-        .product-img { width: 100%; max-width: 300px; border-radius: 10px; margin: 20px 0; }
+        .product-img { width: 100%; max-width: 320px; border-radius: 10px; margin: 20px 0; }
 
         /* 跳動購買按鈕 */
         .buy-link { 
-            display: inline-block; background: #000; color: #fff; padding: 15px 40px; 
-            text-decoration: none; margin: 20px 0; border-radius: 5px; font-weight: bold;
+            display: inline-block; background: #000; color: #fff; padding: 18px 50px; 
+            text-decoration: none; margin: 25px 0; border-radius: 8px; font-weight: bold;
             animation: pulse-animation 2s infinite; 
         }
 
         @keyframes pulse-animation {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.5); }
+            70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
             100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
         }
 
         .coupon-section {
-            margin: 30px auto; padding: 20px; border: 2px dashed #8c7851;
-            background: #fffaf5; border-radius: 15px; width: 90%;
+            margin: 30px auto; padding: 25px; border: 2px dashed #8c7851;
+            background: #fffaf5; border-radius: 15px; width: 85%;
         }
-        .coupon-code { font-size: 24px; font-weight: bold; color: #333; display: block; margin-bottom: 10px; letter-spacing: 2px; }
-        .copy-btn { background: #8c7851; color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; }
+        .coupon-code { font-size: 26px; font-weight: bold; color: #333; display: block; margin-bottom: 10px; letter-spacing: 2px; }
+        .copy-btn { background: #8c7851; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .copy-btn:hover { background: #706041; }
         
-        /* 頁尾版權 */
         footer { 
-            text-align: center; padding: 20px; font-size: 10px; color: #666; letter-spacing: 1px;
+            text-align: center; padding: 30px; font-size: 11px; color: #777; letter-spacing: 2px;
         }
     </style>
 </head>
@@ -114,7 +156,7 @@
         <h2>FIND YOUR SCENT</h2>
         <p>探索專屬於您的正念香氣</p>
         <div class="hero-image-container"><img src="cover.jpg" class="arch-image"></div>
-        <button class="btn" onclick="startQuiz()" style="background:#45554f; color:#ffffff;">開始分析</button>
+        <button class="btn btn-primary" onclick="startQuiz()">開始分析</button>
     </div>
 
     <div id="quiz-page" class="card hidden">
@@ -130,10 +172,10 @@
         <h2>FRAGRANCE MAP</h2>
         <div class="map-wrapper" id="map-bg">
             <div id="target-dot" class="dot" style="left: 50%; top: 50%;"></div>
-            <div class="axis-label" style="top: -35px; left: 50%; transform: translateX(-50%);">木質調</div>
-            <div class="axis-label" style="bottom: -35px; left: 50%; transform: translateX(-50%);">花香調</div>
-            <div class="axis-label" style="left: -55px; top: 50%; transform: translateY(-50%);">甜美</div>
-            <div class="axis-label" style="right: -55px; top: 50%; transform: translateY(-50%);">清爽</div>
+            <div class="axis-label" style="top: -40px; left: 50%; transform: translateX(-50%);">木質調</div>
+            <div class="axis-label" style="bottom: -40px; left: 50%; transform: translateX(-50%);">花香調</div>
+            <div class="axis-label" style="left: -60px; top: 50%; transform: translateY(-50%);">甜美</div>
+            <div class="axis-label" style="right: -60px; top: 50%; transform: translateY(-50%);">清爽</div>
         </div>
         <p id="status-text">正在計算您的專屬香氣...</p>
 
@@ -142,15 +184,15 @@
             <h3 id="p-name"></h3>
 
             <div id="coupon-container" class="coupon-section">
-                <p style="margin:0 0 10px 0; font-size:14px; color:#8c7851;">專屬結帳優惠碼</p>
+                <p style="margin:0 0 10px 0; font-size:15px; color:#8c7851;">專屬結帳優惠碼</p>
                 <span class="coupon-code" id="code-text">OFF10</span>
                 <button class="copy-btn" onclick="copyCoupon()">點擊複製折扣碼</button>
-                <p class="expiry-text" style="font-size:12px; color:#999; margin-top:10px;">※ 2026/01/30 前有效，官網購買即享 10% OFF</p>
+                <p class="expiry-text" style="font-size:12px; color:#999; margin-top:12px;">※ 2026/01/30 前有效，官網購買即享 10% OFF</p>
             </div>
 
             <a id="p-link" href="#" target="_blank" class="buy-link">使用折扣碼，立即購買</a>
             <br>
-            <button class="btn" onclick="location.reload()" style="border:none; text-decoration:underline; margin-top:10px; font-size:13px; color:#999;">重新測驗</button>
+            <button class="btn" onclick="location.reload()" style="border:none; text-decoration:underline; margin-top:15px; font-size:14px; color:#999;">重新測驗</button>
         </div>
     </div>
 </div>
@@ -160,6 +202,7 @@
 </footer>
 
 <script>
+    // 這裡的產品與問題邏輯保持不變（略去重複部分，請延用上一版的 script 內容）
     const productData = {
         oil: [
             { name: "香氛多用油/心靈淨化 (Purification of Mind)", x: 0.7, y: 0.7, img: "https://shoplineimg.com/68527c28c56c870042c966e9/688b940383a3a536e3e145ef/720x.webp", link: "https://www.sinnpurete.com.tw/products/%E9%A6%99%E6%B0%9B%E5%A4%9A%E7%94%A8%E6%B2%B9purification-of-mind-%E5%BF%83%E9%9D%88%E6%B7%A8%E5%8C%96" },
@@ -182,13 +225,12 @@
     ];
 
     let currentStep = 0, scoreX = 0, scoreY = 0, selectedType = "";
-    // 紀錄每一題的得分紀錄，以便回退
     let history = [];
 
     function startQuiz() {
         document.getElementById('start-page').classList.add('hidden');
         document.getElementById('quiz-page').classList.remove('hidden');
-        history = []; // 重設紀錄
+        history = [];
         showQuestion();
     }
 
@@ -196,10 +238,7 @@
         const q = questions[currentStep];
         document.getElementById('progress').innerText = `Step ${currentStep + 1} / 5`;
         document.getElementById('question-text').innerText = q.text;
-        
-        // 如果是第一題，隱藏回上一題
         document.getElementById('back-container').className = currentStep === 0 ? "hidden" : "";
-
         const container = document.getElementById('options-container');
         container.innerHTML = "";
         q.options.forEach(opt => {
@@ -207,17 +246,10 @@
             btn.className = "btn";
             btn.innerText = opt.t;
             btn.onclick = () => {
-                // 儲存當前狀態到紀錄中
-                history.push({
-                    scoreX: scoreX,
-                    scoreY: scoreY,
-                    selectedType: selectedType
-                });
-
+                history.push({ scoreX: scoreX, scoreY: scoreY, selectedType: selectedType });
                 if (opt.type) selectedType = opt.type;
                 if (opt.x !== undefined) scoreX += opt.x;
                 if (opt.y !== undefined) scoreY += opt.y;
-                
                 currentStep++;
                 if (currentStep < questions.length) showQuestion(); else showResult();
             };
@@ -228,7 +260,6 @@
     function prevQuestion() {
         if (currentStep > 0) {
             currentStep--;
-            // 回復上一題的數值
             const prevState = history.pop();
             scoreX = prevState.scoreX;
             scoreY = prevState.scoreY;
@@ -240,13 +271,11 @@
     function showResult() {
         document.getElementById('quiz-page').classList.add('hidden');
         document.getElementById('result-page').classList.remove('hidden');
-
         const mapElement = document.getElementById('map-bg');
         let bgImage = "";
         if (selectedType === 'oil') bgImage = "香氛多用油香氛圖譜.jpg";
         else if (selectedType === 'room') bgImage = "MAP.jpg";
         else if (selectedType === 'perfume') bgImage = "淡香精圖譜.jpg";
-
         if (bgImage) mapElement.style.backgroundImage = "url('" + bgImage + "')";
 
         let closest = productData[selectedType][0];
@@ -291,5 +320,3 @@
 </script>
 </body>
 </html>
-
-
