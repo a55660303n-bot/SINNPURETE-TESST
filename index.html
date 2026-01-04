@@ -62,6 +62,48 @@
         height: 25px; /* 手機版 LOGO 縮小，才不會佔滿螢幕 */
     }
 }
+
+        /* 折扣碼區塊樣式 */
+.coupon-section {
+    margin-top: 30px;
+    padding: 20px;
+    border: 2px dashed #8c7851;
+    background: #fffaf5;
+    border-radius: 8px;
+    display: inline-block;
+    width: 90%;
+    max-width: 350px;
+}
+
+.coupon-code {
+    font-size: 24px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.copy-btn {
+    background: #8c7851;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.copy-btn:hover {
+    background: #6d5d3e;
+}
+
+.expiry-text {
+    font-size: 12px;
+    color: #999;
+    margin-top: 10px;
+}
         
         /* 座標圖 */
         .map-wrapper { position: relative; width: 300px; height: 300px; margin: 40px auto; border: 1px solid #eee; background: #fff; }
@@ -119,6 +161,18 @@
         <p id="p-desc" style="color:#666; font-size:14px;"></p>
         <a id="p-link" href="#" target="_blank" class="buy-link">立即購買</a>
         <button class="btn" onclick="location.reload()" style="margin-top:30px; border:none; text-decoration:underline;">重新測驗</button>
+    <div id="product-detail" class="card hidden">
+    <a id="p-link" href="#" target="_blank" class="buy-link">立即購買</a>
+
+    <div id="coupon-container" class="coupon-section">
+        <p style="margin: 0 0 10px 0; font-size: 14px; color: #8c7851;">專屬結帳優惠碼</p>
+        <span class="coupon-code" id="code-text">OFF10</span>
+        <button class="copy-btn" onclick="copyCoupon()">點擊複製折扣碼</button>
+        <p class="expiry-text">※ 2026/01/30 前有效，官網購買即享 10% OFF</p>
+    </div>
+
+    <button class="btn" onclick="location.reload()" style="margin-top:30px; border:none; text-decoration:underline;">重新測驗</button>
+</div>
     </div>
 </div>
 
@@ -248,11 +302,40 @@
         detail.scrollIntoView({ behavior: 'smooth' });
     }, 2500);
 }
+// 複製折扣碼功能
+function copyCoupon() {
+    const code = document.getElementById('code-text').innerText;
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = document.querySelector('.copy-btn');
+        const originalText = btn.innerText;
+        btn.innerText = "已複製！";
+        btn.style.background = "#28a745"; // 變綠色提示成功
+        
+        setTimeout(() => {
+            btn.innerText = originalText;
+            btn.style.background = "#8c7851";
+        }, 2000);
+    });
+}
+
+// 檢查折扣碼是否過期 (在 showResult 時執行)
+function checkCouponExpiry() {
+    const expiryDate = new Date('2026-01-31'); // 設定為 1/30 的隔天凌晨
+    const today = new Date();
+    
+    if (today >= expiryDate) {
+        const container = document.getElementById('coupon-container');
+        if (container) container.style.display = 'none'; // 過期則隱藏
+    }
+}
+
+    
 </script>
 
 </body>
 
 </html>
+
 
 
 
